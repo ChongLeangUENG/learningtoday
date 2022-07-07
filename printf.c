@@ -4,27 +4,27 @@
 
 int (*print_format(const char *format))(va_list)
 {
-	print_f type[] = {
+	int j = 0;
+
+	print_t p[] = {
 		{"c", print_c},
 		{"s", print_s},
 		{NULL, NULL}
 	};
 
-	int i = 0;
-
-	for (; type[i].t != NULL; i++)
+	for (; p[j].s != NULL; j++)
 	{
-		if (*(type[i].t) == *format)
+		if (*(p[j].s) == *format)
 			break;
 	}
-	return (type[i].f);
-}
+	return (p[j].i);
+};
 
 int _printf(const char *format, ...)
 {
 	va_list p;
-	int (*F)(va_list);
-	unsigned int i = 0; x = 0;
+	int (*f)(va_list);
+	unsigned int i = 0, x = 0;
 
 	if (format == NULL)
 		return (-1);
@@ -54,7 +54,7 @@ int _printf(const char *format, ...)
 				if (f == NULL)
 					return (-1);
 				i += 2;
-				z += f(p);
+				x += f(p);
 				continue;
 			}
 		}
