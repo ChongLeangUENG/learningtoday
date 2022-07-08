@@ -4,7 +4,7 @@
 
 int (*print_format(const char *format))(va_list)
 {
-	int j = 0;
+	unsigned int j;
 
 	print_t p[] = {
 		{"c", print_c},
@@ -12,54 +12,51 @@ int (*print_format(const char *format))(va_list)
 		{NULL, NULL}
 	};
 
-	for (; p[j].s != NULL; j++)
+	for (j = 0; p[j].s != NULL; j++)
 	{
 		if (*(p[j].s) == *format)
+		{
 			break;
+		}
 	}
 	return (p[j].i);
-};
+}
 
 int _printf(const char *format, ...)
 {
-	va_list p;
+	unsigned int x = 0; count = 0;
+	va_list list;
 	int (*f)(va_list);
-	unsigned int i = 0, x = 0;
 
 	if (format == NULL)
 		return (-1);
-
-	va_start(p, format);
-	while (format && format[i])
+	va_start(list, format);
+	while (format[x])
 	{
-		if (format[i] != '%')
+		for (; format[x] != '%' && format[x]; x++)
 		{
-			_putchar(format[i]);
-			x++;
-			i++;
+			_putchar(format[x]);
+			count++;
+		}
+		if (!format[x])
+			return (count);
+		f = print_format(&format[x + 1]);
+		if (f != NULL)
+		{
+			count += f(list);
+			x += 2;
 			continue;
 		}
+		if (!format[x + 1])
+			return (-1);
+		_putchar(format[x]);
+		count++;
+
+		if (format[x + 1] == '%')
+			x += 2;
 		else
-		{
-			if (format[i + 1] == '%')
-			{
-				_putchar('%');
-				x++;
-				i += 2;
-				continue;
-			}
-			else
-			{
-				f = print_format(&format[i + 1]);
-				if (f == NULL)
-					return (-1);
-				i += 2;
-				x += f(p);
-				continue;
-			}
-		}
-		i++;
+			x++;
 	}
-	va_end(p);
-	return (x);
+	va_end(list);
+	return (count);
 }

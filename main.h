@@ -7,12 +7,12 @@
 typedef struct print
 {
 	char *s;
-	int (*i)(va_list);
+	int (*x)(va_list);
 
 }print_t;
 
 int _putchar(char c);
-int (*print_format(const char *format))(va_list);
+int (*print_format(const char *format, int index))(va_list);
 int _printf(const char *format, ...);
 int print_c(va_list c);
 int print_s(va_list s);
